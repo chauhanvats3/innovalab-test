@@ -67,7 +67,7 @@ const copyBlocks = async () => {
   }
 }
 
-let inputValues = reactive([])
+let inputValues = reactive({})
 
 let isValidJSONArray = (jsonString) => {
   try {
@@ -97,27 +97,33 @@ let formBlocksInputHandler = (e) => {
   inputBlocks.blocks = JSON.parse(`[${inputBlocks.blocks[0]}]`)
 
   //[{"asdaw":"asdawdaw"}]
-  inputValues = []
+  /* inputValues = []
   for (let block of inputBlocks.blocks) {
-    /* let blockToPushKey = block.token
-    let blockToPush = {}
-    if (block.type == 'checkbox') {
-      blockToPush[blockToPushKey] = []
-    } else blockToPush[blockToPushKey] = ''
-    inputValues.push(blockToPush) */
+
     let blockToPush = block
     blockToPush.value = ''
     inputValues.push(blockToPush)
-  }
+  } */
 }
 
 let handleFormSubmit = () => {
   let result = {}
-  for (const eachInput of inputValues) {
-    if (eachInput.value == '') return alert(eachInput.token + ' cannot be empty')
+  for (const eachInput of inputBlocks.blocks) {
+    let isRequired = eachInput.props.required
+    let dependencyValue = ''
+
+    if (typeof isRequired === 'string') {
+      for (const eachInput_inner of inputBlocks.blocks)
+        if (eachInput_inner.token == isRequired) dependencyValue = eachInput_inner.value
+
+      if (dependencyValue && !eachInput.value)
+        return alert(`${eachInput.token} cannot be empty because ${isRequired} is TRUE!`)
+    }
+
+    if (eachInput.value == '' && isRequired) return alert(eachInput.token + ' cannot be empty')
+
     result[eachInput.token] = eachInput.value
   }
-  console.log(result)
   alert(JSON.stringify(result))
 }
 </script>
@@ -136,15 +142,11 @@ let handleFormSubmit = () => {
           v-bind="{ ...eachBlock.props }"
           :id="eachBlock.token"
           v-if="eachBlock.token"
-          v-model="inputValues[index].value"
+          v-model="eachBlock.value"
         />
-        {{ inputValues[index].value }}
+        {{ eachBlock.value }}
       </div>
-      <button
-        type="submit"
-        @click.prevent.stop="handleFormSubmit"
-        v-if="inputBlocks.blocks.length > 0"
-      >
+      <button type="submit" @click.prevent.stop="handleFormSubmit" v-if="inputBlocks.blocks[0]">
         Submit
       </button>
     </div>
