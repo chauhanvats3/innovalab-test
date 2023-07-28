@@ -42,7 +42,7 @@ let possiblePageOptions = computed(() => {
           </select>
         </div>
         <div class="number">
-          <label for="resultPerPage">Page Number</label>
+          <label for="pageNumber">Page Number</label>
           <select name="pageNumber" id="pageNumber" v-model="currentPage">
             <option disabled value="">Select Page</option>
             <option v-for="n in possiblePageOptions" :value="n" :key="n">{{ n }}</option>
@@ -78,7 +78,8 @@ let possiblePageOptions = computed(() => {
   gap: 20px;
   justify-content: space-between;
 }
-.results > * {
+.results > *,
+.number > * {
   margin: 5px 10px;
 }
 .users {
