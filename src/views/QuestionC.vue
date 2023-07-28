@@ -120,7 +120,7 @@ let handleFormSubmit = () => {
         return alert(`${eachInput.token} cannot be empty because ${isRequired} is TRUE!`)
     }
 
-    if (eachInput.value == '' && isRequired) return alert(eachInput.token + ' cannot be empty')
+    if (!eachInput.value && isRequired) return alert(eachInput.token + ' cannot be empty')
 
     result[eachInput.token] = eachInput.value
   }
