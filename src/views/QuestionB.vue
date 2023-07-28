@@ -18,9 +18,6 @@ let usersToShow = computed(() => store.getters.fewUsers(currentPage.value, eachP
 let possiblePageOptions = computed(() => {
   return Math.ceil(totalUsers.value / eachPageUserCount.value)
 })
-let user = {}
-store.commit('user/storeUser', user)
-store.commit('storeUser', user)
 </script>
 <template>
   <div class="que-b">
